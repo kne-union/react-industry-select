@@ -1,8 +1,8 @@
-import CitySelect from '@kne/react-city-select';
+import IndustrySelect from '@kne/react-industry-select';
 import 'antd/dist/antd.css';
 
 const App = () => {
-    return <CitySelect size={10} visible/>;
+    return <IndustrySelect size={10} visible/>;
 };
 
 export default App;
