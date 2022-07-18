@@ -13,7 +13,7 @@
     "react": "file:../node_modules/react",
     "react-dom": "file:../node_modules/react-dom",
     "antd": "file:../node_modules/antd",
-    "@kne/react-industry-select": "file:../node_modules/react-industry-select",
+    "@kne/react-industry-select": "file:..",
     "react-scripts": "file:../node_modules/react-scripts"
   },
   "eslintConfig": {
