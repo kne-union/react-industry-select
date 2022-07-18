@@ -54,7 +54,7 @@ export const DisplayCity = ({id, children}) => {
 export {default as preset} from './preset';
 
 
-const IndustrySelect = ({title, size, defaultValue, onChange, ...props}) => {
+const IndustrySelect = ({title, size, defaultValue, onChange,modalTitleRight, ...props}) => {
     const [industries, setIndustries] = useState(defaultValue);
     const [selectedKeys, setSelectedKeys] = useState([]);
 
@@ -85,6 +85,9 @@ const IndustrySelect = ({title, size, defaultValue, onChange, ...props}) => {
         <Col pull={2}><SearchInput onChange={(value) => {
             appendCity(value);
         }}/></Col>
+        <Col pull={2}>
+            {modalTitleRight}
+        </Col>
     </Row>} footer={null}>
         <Row>
             <Col span={6}>
@@ -155,7 +158,10 @@ const IndustrySelect = ({title, size, defaultValue, onChange, ...props}) => {
 };
 
 IndustrySelect.defaultProps = {
-    title: "请选择行业", size: 1, defaultValue: [], onChange: () => {
+    title: "请选择行业", 
+    size: 1, 
+    defaultValue: [], 
+    onChange: () => {
     }
 };
 
