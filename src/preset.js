@@ -1,27 +1,5 @@
-const getSearchList = (() => {
-    let searchList;
-    return ({city}) => {
-        if (!searchList) {
-            const list = [];
-            ['gangaotai', 'municipality'].forEach((name) => {
-                list.push(...city.relations[name]);
-            });
-            ['provinces', 'continents'].forEach((name) => {
-                city.relations[name].forEach((id) => {
-                    list.push(id);
-                    list.push(...city.relations[id]);
-                });
-            });
-            searchList = list.map((id) => {
-                return city.list[id];
-            });
-        }
-        return searchList;
-    };
-})();
-
 export const apis = {
-    loadData: (() => {
+    loadIndustryData: (() => {
         let cache;
         return () => {
             if (!cache) {
@@ -31,17 +9,17 @@ export const apis = {
         };
     })(),
     getLeftList: () => {
-        return apis.loadData().then(({data}) => {
+        return apis.loadIndustryData().then(({data}) => {
             return data.filter(item=>item.level === '0'&&item.code!=="000")
         });
     },
     getRightList: (id) => {
-        return apis.loadData().then(({data}) => {
+        return apis.loadIndustryData().then(({data}) => {
             return data.filter(item=>item.level === '1'&&item.parentCode===id)
         });
     },
     getIndustry: (id) => {
-        return apis.loadData().then(({data}) => {
+        return apis.loadIndustryData().then(({data}) => {
             return data.find(item=>item.level === '1'&&item.code===id)
         });
     }, 
@@ -49,7 +27,7 @@ export const apis = {
         if (!value) {
             return Promise.resolve([]);
         }
-        return apis.loadData().then(({data}) => {
+        return apis.loadIndustryData().then(({data}) => {
             return data.filter(item=>item.level === '1').filter((item) => {
                 return ['pinyin', 'chName', 'shortName', 'enName'].some((name) => {
                     return item[name].toUpperCase().indexOf(value.toUpperCase()) > -1;
