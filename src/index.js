@@ -142,7 +142,7 @@ const IndustrySelect = ({title, size, defaultValue, onChange,modalTitleRight, ..
                                 return <Tag closable={size > 1} onClose={() => {
                                     removeCity(id);
                                 }}>{data.chName}</Tag>;
-                            }}</Dis>
+                            }}</DisplayIndustry>
                         })}
                     </Col>
                     {size > 1 ? <Col>
