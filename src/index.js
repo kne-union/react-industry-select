@@ -47,7 +47,7 @@ const SearchInput = ({onChange}) => {
 
 export const apis = _apis;
 
-export const DisplayCity = ({id, children}) => {
+export const DisplayIndustry = ({id, children}) => {
     return <RemoteData loader={apis.getIndustry} options={id}>{children}</RemoteData>
 };
 
@@ -138,11 +138,11 @@ const IndustrySelect = ({title, size, defaultValue, onChange,modalTitleRight, ..
                         maxHeight: '70px', overflowY: 'auto'
                     }}>
                         {industries.map((id) => {
-                            return <DisplayCity key={id} id={id}>{(data) => {
+                            return <DisplayIndustry key={id} id={id}>{(data) => {
                                 return <Tag closable={size > 1} onClose={() => {
                                     removeCity(id);
                                 }}>{data.chName}</Tag>;
-                            }}</DisplayCity>
+                            }}</Dis>
                         })}
                     </Col>
                     {size > 1 ? <Col>

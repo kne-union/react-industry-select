@@ -1,8 +1,11 @@
-import IndustrySelect from '@kne/react-industry-select';
+import IndustrySelect,{createIndustrySelect} from '@kne/react-industry-select';
 import 'antd/dist/antd.css';
 
 const App = () => {
-    return <IndustrySelect size={10} visible/>;
+    createIndustrySelect({
+        defaultValue:['040']
+    })
+    return null;
 };
 
 export default App;
