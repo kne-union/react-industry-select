@@ -20,7 +20,15 @@ export const apis = {
     },
     getIndustry: (id) => {
         return apis.loadData().then(({data}) => {
-            return data.find(item=>item.level === '1'&&item.code===id)
+            if(Array.isArray(id)){
+                return data.filter(item=>{
+                    return id.some(i=>item.level === '1'&&item.code===i)
+                })
+            }
+            if(typeof id === 'string'){
+                return data.find(item=>item.level === '1'&&item.code===id)
+            }
+            return null
         });
     }, 
     searchIndustries: (value) => {

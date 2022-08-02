@@ -97,10 +97,14 @@ const IndustrySelect = ({title, size, defaultValue, onChange,modalTitleRight, ..
                     <RemoteData loader={apis.getLeftList} onLoad={(data) => {
                         data && data.length && setSelectedKeys(data[0].code);
                     }}>{(data) => {
-                        return <Menu selectedKeys={selectedKeys} onSelect={(item) => {
+                        return <Menu selectedKeys={selectedKeys} 
+                        items={data.map((item) => ({
+                            key:item.code,
+                            label:item.chName
+                        }))}
+                        onSelect={(item) => {
                             setSelectedKeys(item.key);
                         }}>
-                            {data.map((item) => <Menu.Item key={item.code}>{item.chName}</Menu.Item>)}
                         </Menu>;
                     }}</RemoteData>
                 </div>
@@ -125,7 +129,7 @@ const IndustrySelect = ({title, size, defaultValue, onChange,modalTitleRight, ..
                                             }}
                                             key={code}>{chName}</Tag.CheckableTag>)}
                                     </Space>;
-                                }}</RemoteData></> : <Empty/>}
+                                }}</RemoteData></> : null}
 
                         </Space>
                     </Col>
