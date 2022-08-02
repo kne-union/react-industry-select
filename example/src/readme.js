@@ -1,9 +1,9 @@
-import * as component_13 from '@kne/react-industry-select';
-import * as component_14 from 'antd';
+import * as component_91 from '@kne/react-industry-select';
+import * as component_92 from 'antd';
 const readmeConfig = {
     name: `@kne/react-industry-select`,
     description: `行业选择器`,
-    summary: `<p>全国城市选择器</p>`,
+    summary: `<p>行业选择器，可支持多选和单选，可以通过覆盖preset的apis的方法扩展此组件</p>`,
     api: `<h3>其他属性参考antd modal的props</h3>
 <table>
 <thead>
@@ -57,8 +57,14 @@ const readmeConfig = {
 <tbody>
 <tr>
 <td>id</td>
-<td>选中的项的id</td>
-<td>string</td>
+<td>选中的项的id，支持字符串或数组格式</td>
+<td>string/array</td>
+<td>-</td>
+</tr>
+<tr>
+<td>children</td>
+<td>id是数组返回的也是数组，id是字符串，返回的是对象</td>
+<td>function({list}=&gt;{})</td>
 <td>-</td>
 </tr>
 </tbody>
@@ -68,19 +74,26 @@ const readmeConfig = {
         className: `react_industry_select_8c848`,
         style: ``,
         list: [{
-    title: `行业类别`,
-    description: `选择行业类别，可支持多选，数据可以自己扩展`,
+    title: `行业类别多选`,
+    description: `多选`,
     code: `const {createIndustrySelect,DisplayIndustry}=IndustrySelect;
 const {Button}=Antd;
 
+const {useState}=React;
+
 const BaseExample = ()=>{
+    const [v,setV]=useState(["040","420"]);
+
     return <Button onClick={()=>{
         createIndustrySelect({
-            defaultValue:["040","420"],
-            size:3
+            defaultValue:v,
+            size:3,
+            onChange:(code)=>{
+                setV(code);
+            }
         })
     }}>
-        <DisplayIndustry id={["040","420"]}>{(list)=>{
+        <DisplayIndustry id={v}>{(list)=>{
             if(Array.isArray(list)){
                 return list.map(item=>item.chName).join(",")
             }
@@ -95,11 +108,52 @@ render(<BaseExample />);
     scope: [{
     name: "IndustrySelect",
     packageName: "@kne/react-industry-select",
-    component: component_13
+    component: component_91
 },{
     name: "Antd",
     packageName: "antd",
-    component: component_14
+    component: component_92
+}]
+},{
+    title: `行业类别单选`,
+    description: `单选`,
+    code: `const {createIndustrySelect,DisplayIndustry}=IndustrySelect;
+const {Button}=Antd;
+
+const {useState}=React;
+
+const BaseExample = ()=>{
+    const [v,setV]=useState(["040"]);
+
+    return <Button onClick={()=>{
+        createIndustrySelect({
+            defaultValue:v,
+            size:1,
+            onChange:(code)=>{
+                setV(code);
+            }
+        })
+    }}>
+        <DisplayIndustry id={v}>{(list)=>{
+            if(Array.isArray(list)){
+                return list.map(item=>item.chName).join(",")
+            }
+            return list&&list.chName
+        }}</DisplayIndustry>
+    </Button>
+};
+
+render(<BaseExample />);
+
+`,
+    scope: [{
+    name: "IndustrySelect",
+    packageName: "@kne/react-industry-select",
+    component: component_91
+},{
+    name: "Antd",
+    packageName: "antd",
+    component: component_92
 }]
 }]
     }
