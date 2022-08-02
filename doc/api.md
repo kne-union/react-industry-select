@@ -2,7 +2,7 @@
 |属性名|说明|类型|默认值|
 |  ---  | ---  | --- | --- |
 |  title  | 模态框标题 | string | - |
-|  size  | 选择数量 | boolean | 1 |
+|  size  | 支持多选 | boolean | 1 |
 |  defaultValue  | 默认选中项 | array | - |
 |  onChange  | 选中触发事件 | function(value) | - |
 

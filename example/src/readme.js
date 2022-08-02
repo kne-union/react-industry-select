@@ -1,5 +1,5 @@
-import * as component_1 from '@kne/react-industry-select';
-import * as component_2 from 'antd';
+import * as component_5 from '@kne/react-industry-select';
+import * as component_6 from 'antd';
 const readmeConfig = {
     name: `@kne/react-industry-select`,
     description: `行业选择器`,
@@ -23,7 +23,7 @@ const readmeConfig = {
 </tr>
 <tr>
 <td>size</td>
-<td>选择数量</td>
+<td>支持多选</td>
 <td>boolean</td>
 <td>1</td>
 </tr>
@@ -76,10 +76,16 @@ const {Button}=Antd;
 const BaseExample = ()=>{
     return <Button onClick={()=>{
         createIndustrySelect({
-            defaultValue:["040"]
+            defaultValue:["040","420"],
+            size:3
         })
     }}>
-        <DisplayIndustry id={"040"}>{(list)=>list.chName}</DisplayIndustry>
+        <DisplayIndustry id={["040","420"]}>{(list)=>{
+            if(Array.isArray(list)){
+                return list.map(item=>item.chName).join(",")
+            }
+            return list&&list.chName
+        }}</DisplayIndustry>
     </Button>
 };
 
@@ -89,11 +95,11 @@ render(<BaseExample />);
     scope: [{
     name: "IndustrySelect",
     packageName: "@kne/react-industry-select",
-    component: component_1
+    component: component_5
 },{
     name: "Antd",
     packageName: "antd",
-    component: component_2
+    component: component_6
 }]
 }]
     }
