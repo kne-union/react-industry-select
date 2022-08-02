@@ -1,25 +1,3 @@
-const getSearchList = (() => {
-    let searchList;
-    return ({city}) => {
-        if (!searchList) {
-            const list = [];
-            ['gangaotai', 'municipality'].forEach((name) => {
-                list.push(...city.relations[name]);
-            });
-            ['provinces', 'continents'].forEach((name) => {
-                city.relations[name].forEach((id) => {
-                    list.push(id);
-                    list.push(...city.relations[id]);
-                });
-            });
-            searchList = list.map((id) => {
-                return city.list[id];
-            });
-        }
-        return searchList;
-    };
-})();
-
 export const apis = {
     loadData: (() => {
         let cache;

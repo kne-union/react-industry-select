@@ -47,14 +47,14 @@ const SearchInput = ({onChange}) => {
 
 export const apis = _apis;
 
-export const DisplayCity = ({id, children}) => {
+export const DisplayIndustry = ({id, children}) => {
     return <RemoteData loader={apis.getIndustry} options={id}>{children}</RemoteData>
 };
 
 export {default as preset} from './preset';
 
 
-const IndustrySelect = ({title, size, defaultValue, onChange, ...props}) => {
+const IndustrySelect = ({title, size, defaultValue, onChange,modalTitleRight, ...props}) => {
     const [industries, setIndustries] = useState(defaultValue);
     const [selectedKeys, setSelectedKeys] = useState([]);
 
@@ -85,6 +85,9 @@ const IndustrySelect = ({title, size, defaultValue, onChange, ...props}) => {
         <Col pull={2}><SearchInput onChange={(value) => {
             appendCity(value);
         }}/></Col>
+        <Col pull={2}>
+            {modalTitleRight}
+        </Col>
     </Row>} footer={null}>
         <Row>
             <Col span={6}>
@@ -135,11 +138,11 @@ const IndustrySelect = ({title, size, defaultValue, onChange, ...props}) => {
                         maxHeight: '70px', overflowY: 'auto'
                     }}>
                         {industries.map((id) => {
-                            return <DisplayCity key={id} id={id}>{(data) => {
+                            return <DisplayIndustry key={id} id={id}>{(data) => {
                                 return <Tag closable={size > 1} onClose={() => {
                                     removeCity(id);
                                 }}>{data.chName}</Tag>;
-                            }}</DisplayCity>
+                            }}</DisplayIndustry>
                         })}
                     </Col>
                     {size > 1 ? <Col>
@@ -155,7 +158,10 @@ const IndustrySelect = ({title, size, defaultValue, onChange, ...props}) => {
 };
 
 IndustrySelect.defaultProps = {
-    title: "请选择行业", size: 1, defaultValue: [], onChange: () => {
+    title: "请选择行业", 
+    size: 1, 
+    defaultValue: [], 
+    onChange: () => {
     }
 };
 
