@@ -1,12 +1,12 @@
 {
   "name": "@kne/react-industry-select",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "行业选择器",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.js",
   "scripts": {
-    "init": "npm install && cd example && npm install",
+    "init": "npm install && cd example && npm install --legacy-peer-deps",
     "start": "run-p start:lib start:md start:example",
     "build": "run-s build:lib build:md build:example",
     "build:lib": "microbundle --no-compress --format modern,cjs --jsx React.createElement --jsxFragment React.Fragment",
@@ -50,27 +50,24 @@
   "peerDependencies": {
     "antd": "4.x",
     "prop-types": ">=15.x",
-    "react": ">=16.x"
+    "react": ">=16.x",
+    "react-dom": ">=16.x"
   },
   "devDependencies": {
+    "@kne/md-doc": "^0.1.6",
     "antd": "^4.18.9",
     "cross-env": "^7.0.3",
     "gh-pages": "^3.2.3",
     "husky": "^7.0.4",
     "microbundle": "^0.14.2",
+    "node-sass": "^7.0.1",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.5.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-scripts": "^5.0.0",
-    "sass": "^1.53.0",
-    "@kne/md-doc": "^0.1.3",
-    "@kne/microbundle": "^0.15.2"
-  },
-  "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1"
+  },
+  "dependencies": {
     "@kne/antd-enhance": "^0.1.10",
     "classnames": "^2.3.1"
   }

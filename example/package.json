@@ -9,12 +9,12 @@
     "test": "craco test"
   },
   "dependencies": {
+    "@kne/example-driver": "^0.1.0",
+    "@kne/react-industry-select": "file:..",
+    "antd": "^4.22.3",
     "react": "file:../node_modules/react",
     "react-dom": "file:../node_modules/react-dom",
-    "antd": "file:../node_modules/antd",
-    "@kne/react-industry-select": "file:..",
-    "react-scripts": "file:../node_modules/react-scripts",
-    "@kne/example-driver": "^0.1.0"
+    "react-scripts": "file:../node_modules/react-scripts"
   },
   "browserslist": [
     ">0.2%",
@@ -24,11 +24,11 @@
   ],
   "devDependencies": {
     "@craco/craco": "^6.4.5",
-    "@kne/md-doc": "^0.1.2",
+    "@kne/md-doc": "^0.1.6",
     "chokidar": "^3.5.3",
     "cross-spawn-promise": "^0.10.2",
     "fs-extra": "^10.1.0",
-    "react-scripts": "^5.0.1",
-    "sass": "^1.54.0"
+    "node-sass": "^7.0.1",
+    "react-scripts": "^5.0.1"
   }
 }
