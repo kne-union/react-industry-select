@@ -158,9 +158,9 @@ const IndustrySelect = ({title, size, defaultValue, onChange,modalTitleRight, ..
 };
 
 IndustrySelect.defaultProps = {
-    title: "请选择行业", 
-    size: 1, 
-    defaultValue: [], 
+    title: "请选择行业",
+    size: 1,
+    defaultValue: [],
     onChange: () => {
     }
 };
