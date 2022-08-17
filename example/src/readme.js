@@ -1,5 +1,5 @@
-import * as component_91 from '@kne/react-industry-select';
-import * as component_92 from 'antd';
+import * as component_7 from '@kne/react-industry-select';
+import * as component_8 from 'antd';
 const readmeConfig = {
     name: `@kne/react-industry-select`,
     description: `行业选择器`,
@@ -68,6 +68,80 @@ const readmeConfig = {
 <td>-</td>
 </tr>
 </tbody>
+</table>
+<h4>preset</h4>
+<table>
+<thead>
+<tr>
+<th>属性名</th>
+<th>说明</th>
+<th>类型</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>options</td>
+<td>需要覆盖的参数,具体参数参考下面api部分</td>
+<td>object</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<h4>api</h4>
+<table>
+<thead>
+<tr>
+<th>属性名</th>
+<th>说明</th>
+<th>类型</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>loadData</td>
+<td>获取行业数据，默认采用内置数据</td>
+<td>function</td>
+<td>-</td>
+</tr>
+<tr>
+<td>getAllList</td>
+<td>获取所有行业数据列表</td>
+<td>function</td>
+<td>-</td>
+</tr>
+<tr>
+<td>getLeftList</td>
+<td>获取左侧一级行业列表</td>
+<td>funciton</td>
+<td>-</td>
+</tr>
+<tr>
+<td>getAllRightList</td>
+<td>获取包含一级二级数据列表</td>
+<td>function</td>
+<td>-</td>
+</tr>
+<tr>
+<td>getIndustry(id)</td>
+<td>传入行业ID返回行业数据</td>
+<td>function</td>
+<td>-</td>
+</tr>
+<tr>
+<td>getChildById(id)</td>
+<td>通过一级id，获取二级行业</td>
+<td>function</td>
+<td>-</td>
+</tr>
+<tr>
+<td>searchIndustries(searchStr)</td>
+<td>通过关键字搜索行业，支持拼音首字母缩写</td>
+<td>function</td>
+<td>-</td>
+</tr>
+</tbody>
 </table>`,
     example: {
         isFull: false,
@@ -108,11 +182,11 @@ render(<BaseExample />);
     scope: [{
     name: "IndustrySelect",
     packageName: "@kne/react-industry-select",
-    component: component_91
+    component: component_7
 },{
     name: "Antd",
     packageName: "antd",
-    component: component_92
+    component: component_8
 }]
 },{
     title: `行业类别单选`,
@@ -149,11 +223,11 @@ render(<BaseExample />);
     scope: [{
     name: "IndustrySelect",
     packageName: "@kne/react-industry-select",
-    component: component_91
+    component: component_7
 },{
     name: "Antd",
     packageName: "antd",
-    component: component_92
+    component: component_8
 }]
 }]
     }

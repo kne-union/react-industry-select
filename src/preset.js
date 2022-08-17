@@ -8,6 +8,11 @@ export const apis = {
             return cache;
         };
     })(),
+    getAllList: ()=>{
+        return apis.loadData().then(({data}) => {
+            return data
+        });
+    },
     getLeftList: () => {
         return apis.loadData().then(({data}) => {
             return data.filter(item=>item.level === '0'&&item.code!=="000")
@@ -16,6 +21,16 @@ export const apis = {
     getRightList: (id) => {
         return apis.loadData().then(({data}) => {
             return data.filter(item=>item.level === '1'&&item.parentCode===id)
+        });
+    },
+    getChildById: (data,id) => {
+        return data.filter(item=>item.level === '1'&&item.parentCode===id)
+    },
+    getAllRightList: ()=>{
+        return apis.loadData().then(({data}) => {
+            return data.filter(item=>item.level === '0'&&item.code!=="000").map(item=>{
+                return {...item,childList: apis.getChildById(data,item.code)}
+            })
         });
     },
     getIndustry: (id) => {
