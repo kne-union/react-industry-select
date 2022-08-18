@@ -127,10 +127,11 @@ const IndustrySelect = ({ onCancel, title, size, defaultValue, onChange, modalTi
 									<Space direction="vertical" style={{ width: '100%' }}>
 										<RemoteData loader={apis.getAllRightList}>{(data) => {
 											return data.map((first, index) => {
-												return <Space direction='vertical' key={first.code} size={16}>
+												return <Space direction='vertical' key={first.code} size={16} style={{width: "100%"}}>
 													<div style={{ fontWeight: 500, marginTop: index !== 0 ? 32 : 0 }} className="right-first-title" id={first.chName}>{first.chName}</div>
-													<Space wrap>
-														{(first.childList || []).map(({ code, chName }) => <Space size={24} key={code}><Checkbox
+													<Row wrap justify='space-between'>
+														{(first.childList || []).map(({ code, chName }) => <Col span={8} key={code}>
+															<Checkbox
 															checked={industries.indexOf(code) > -1}
 															onChange={(e) => {
 																const checked = e.target.checked;
@@ -140,8 +141,9 @@ const IndustrySelect = ({ onCancel, title, size, defaultValue, onChange, modalTi
 																	removeCity(code);
 																}
 															}}
-														>{chName}</Checkbox></Space>)}
-													</Space>
+														>{chName}</Checkbox>
+														</Col>)}
+													</Row>
 												</Space>
 											})
 										}}</RemoteData>
