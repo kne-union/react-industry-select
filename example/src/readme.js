@@ -1,5 +1,5 @@
-import * as component_3 from '@kne/react-industry-select';
-import * as component_4 from 'antd';
+import * as component_5 from '@kne/react-industry-select';
+import * as component_6 from 'antd';
 const readmeConfig = {
     name: `@kne/react-industry-select`,
     description: `行业选择器`,
@@ -182,11 +182,11 @@ render(<BaseExample />);
     scope: [{
     name: "IndustrySelect",
     packageName: "@kne/react-industry-select",
-    component: component_3
+    component: component_5
 },{
     name: "Antd",
     packageName: "antd",
-    component: component_4
+    component: component_6
 }]
 },{
     title: `行业类别单选`,
@@ -223,11 +223,11 @@ render(<BaseExample />);
     scope: [{
     name: "IndustrySelect",
     packageName: "@kne/react-industry-select",
-    component: component_3
+    component: component_5
 },{
     name: "Antd",
     packageName: "antd",
-    component: component_4
+    component: component_6
 }]
 }]
     }

@@ -1,0 +1,68 @@
+.industry-modal{
+  font-size: 13px;
+  overflow: hidden;
+  .ant-modal-body{
+    padding:0;
+    height: calc(100vh - 240px);
+    > .ant-row{
+      height: 100%;
+    }
+  }
+  .ant-modal-footer{
+    text-align: left;
+  }
+  .ant-anchor-ink::before{
+    background-color: transparent;
+  }
+  .ant-badge-count{
+    background-color: rgba(92, 184, 178, 0.1);
+    color: #5CB8B2;
+    box-shadow: none;
+    border-radius: 50%;
+  }
+  .ant-anchor-link-title{
+
+    font-size: 12px;
+    color: #222222;
+    line-height: 18px;
+    padding:7px 8px;
+  }
+  .ant-anchor-link-active > .ant-anchor-link-title{
+    background: #F3F3F3;
+    border-radius: 4px;
+    font-weight: 500;
+    border:none;
+  }
+  &-left{
+    padding-top:30px;
+    flex-shrink: 0;
+    width: 198px;
+    padding-right: 24px;
+    border-right: solid 1px #F1F1F1;
+  }
+  &-right{
+    padding-left: 32px;
+    height: 100%;
+    &-content{
+      padding-top:30px;
+      padding-bottom:30px;
+    }
+    .ant-checkbox-wrapper{
+      margin-bottom: 12px;
+    }
+    .right-first-title{
+      font-size: 14px;
+    }
+  }
+  &-tag{
+    border:none;
+    padding:5px 8px 5px 12px;
+    margin-right: 0;
+  }
+  &-search{
+    font-weight: normal;
+  }
+  &-footer{
+    width: 100%;
+  }
+}
