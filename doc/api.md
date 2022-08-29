@@ -5,6 +5,7 @@
 |  size  | 支持多选 | boolean | 1 |
 |  defaultValue  | 默认选中项 | array | - |
 |  onChange  | 选中触发事件 | function(value) | - |
+|  labelInValue  | value是否包含label | boolean | false |
 
 
 ### IndustrySelect.createIndustrySelect
@@ -33,5 +34,6 @@
 | getLeftList            |获取左侧一级行业列表|funciton|-|
 | getAllRightList                 |获取包含一级二级数据列表|function|-|
 | getIndustry(id)             |传入行业ID返回行业数据|function|-|
+| getIndustryByName(name)             |传入行业name返回行业数据|function|-|
 | getChildById(id)     |通过一级id，获取二级行业|function|-|
 | searchIndustries(searchStr) |通过关键字搜索行业，支持拼音首字母缩写|function|-|

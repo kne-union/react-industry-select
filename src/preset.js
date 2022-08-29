@@ -46,6 +46,19 @@ export const apis = {
             return null
         });
     }, 
+    getIndustryByName: (name) => {
+        return apis.loadData().then(({data}) => {
+            if(Array.isArray(id)){
+                return data.filter(item=>{
+                    return id.some(i=>item.level === '1'&&item.chName===i)
+                })
+            }
+            if(typeof id === 'string'){
+                return data.find(item=>item.level === '1'&&item.chName===id)
+            }
+            return null
+        });
+    }, 
     searchIndustries: (value) => {
         if (!value) {
             return Promise.resolve([]);

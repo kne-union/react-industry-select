@@ -1,12 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef,useMemo } from 'react';
 import { Modal, Row, Col, Checkbox, Result, Spin, Space, Tag, Anchor, Select, Button, message, Badge } from 'antd';
 import { withLayer } from "@kne/antd-enhance";
 import { apis as _apis } from './preset';
 import get from 'lodash/get';
 import './index.scss';
+import cloneDeep from 'lodash/cloneDeep';
 
-const getCount = (data, id, selectedKeys) => {
-	const childId = (data || []).filter(item => item.parentCode === id && selectedKeys.indexOf(item.code) > -1).map(item => item.code);
+const getCount = (data, id, industries=[]) => {
+	const childId = (data || []).filter(item => item.parentCode === id && industries.indexOf(item.code) > -1).map(item => item.code);
 	return childId.length;
 }
 
@@ -33,10 +34,12 @@ export const RemoteData = ({ loader, options, onLoad, children }) => {
 	return children(data)
 };
 
-const SearchInput = ({ onChange }) => {
+const SearchInput = ({ onChange,labelInValue,industriesValue }) => {
 	const [value, setValue] = useState(null);
 	const [data, setData] = useState([]);
-	return <Select className='industry-modal-search' value={value} onChange={(value) => {
+	return <Select labelInValue={labelInValue} className='industry-modal-search' value={value} onChange={(value) => {
+		if(industriesValue.indexOf(!labelInValue?value:get(value,'value'))>-1) return;
+
 		onChange && onChange(value);
 		setValue(null);
 		setData([]);
@@ -61,8 +64,9 @@ export const DisplayIndustry = ({ id, children }) => {
 export { default as preset } from './preset';
 
 
-const IndustrySelect = ({ onCancel, title, size, defaultValue, onChange, modalTitleRight, ...props }) => {
-	const [industries, setIndustries] = useState(defaultValue);
+const IndustrySelect = ({ labelInValue,onCancel, title, size, defaultValue, onChange, modalTitleRight, ...props }) => {
+	const [industries, setIndustries] = useState(defaultValue||[]);
+
 	const appendIndustry = (code) => {
 		if (size === 1) {
 			setIndustries([code]);
@@ -73,18 +77,22 @@ const IndustrySelect = ({ onCancel, title, size, defaultValue, onChange, modalTi
 			message.error(`最多选择${size}个`);
 			return;
 		}
-		const _Industrys = JSON.parse(JSON.stringify(industries))
+		const _Industrys = cloneDeep(industries);
 		_Industrys.push(code);
 		setIndustries([..._Industrys]);
 	};
 	const removeIndustry = (code) => {
 		setIndustries((list) => {
 			const newList = list.slice(0);
-			const index = list.indexOf(code);
+			const index = labelInValue?list.map(item=>get(item,'value')).indexOf(code):list.indexOf(code);
 			newList.splice(index, 1);
 			return newList;
 		});
 	};
+
+	const industriesValue=useMemo(() => {
+		return labelInValue?industries.map(item=>get(item,'value',"")):industries;
+	}, [industries,labelInValue]);
 
 	return <Modal {...props} width={1000} centered 
 	wrapClassName="industry-modal"
@@ -92,7 +100,8 @@ const IndustrySelect = ({ onCancel, title, size, defaultValue, onChange, modalTi
 		title={<Row align="middle" justify="space-between">
 			<Col>{title}</Col>
 			<Col pull={1}><SearchInput
-
+			industriesValue={industriesValue}
+				labelInValue={labelInValue}
 				onChange={(value) => {
 					appendIndustry(value);
 				}} /></Col>
@@ -102,14 +111,14 @@ const IndustrySelect = ({ onCancel, title, size, defaultValue, onChange, modalTi
 		</Row>} footer={
 			<Space className='industry-modal-footer' direction='vertical' size={12}>
 				<Row align='middle' justify='start'>
-					<Space wrap={false} size={8}>
+					<Space wrap={false} size={8} className='industry-modal-selected'>
 						<span style={{
 							whiteSpace: 'nowrap'
 						}}>已选{size > 1 ? <>（{industries.length}/{size}）</> : null}：</span>
-						{industries.map((id) => {
+						{industriesValue.map((id,index) => {
 							return <DisplayIndustry key={id} id={id}>{(data) => {
 								return <Tag className='industry-modal-tag' closable={size > 1} onClose={() => {
-									removeIndustry(id);
+									removeIndustry(get(data,'code'));
 								}}>{get(data, "chName")}</Tag>;
 							}}</DisplayIndustry>
 						})}
@@ -128,10 +137,12 @@ const IndustrySelect = ({ onCancel, title, size, defaultValue, onChange, modalTi
 		<RemoteData loader={apis.getAllList}>{(dataSource) => {
 			return <>
 				<Row wrap={false}>
-					<Col className='industry-modal-left'>
-						<div style={{ overflowY: 'auto', height: "100%" }}>
+					<Col className='industry-modal-left-col'>
+						<div className='industry-modal-left'>
 							<RemoteData loader={apis.getLeftList} >{(data) => {
-								return <Anchor bounds={0} showInkInFixed={false} affix={false} getCurrentAnchor={(activeLink) => {
+								return <Anchor bounds={0} showInkInFixed={false} affix={true}  getContainer={()=>{
+									return document.querySelector('#scroll')
+								}} getCurrentAnchor={(activeLink) => {
 									if (activeLink) {
 										return activeLink
 									}
@@ -140,7 +151,7 @@ const IndustrySelect = ({ onCancel, title, size, defaultValue, onChange, modalTi
 									{data.map(item => {
 										return <Anchor.Link key={item.code} title={<Space>
 											<span>{item.chName}</span>
-											<Badge count={getCount(dataSource, item.code, industries)} />
+											<Badge count={getCount(dataSource, item.code, industriesValue)} />
 										</Space>} href={`#${item.chName}`} />
 
 									})}
@@ -149,7 +160,7 @@ const IndustrySelect = ({ onCancel, title, size, defaultValue, onChange, modalTi
 						</div>
 					</Col>
 					<Col flex={1} className='industry-modal-right'>
-						<div style={{ overflowY: 'auto', height: "100%" }}>
+						<div style={{ overflowY: 'auto', height: "100%" }} id="scroll">
 							<Row style={{ flex: 1 }} className="industry-modal-right-content">
 								<Col flex={1}>
 									<Space direction="vertical" style={{ width: '100%' }}>
@@ -158,13 +169,13 @@ const IndustrySelect = ({ onCancel, title, size, defaultValue, onChange, modalTi
 												return <Space direction='vertical' key={first.code} size={16} style={{ width: "100%" }}>
 													<div style={{ fontWeight: 500, marginTop: index !== 0 ? 32 : 0 }} className="right-first-title" id={first.chName}>{first.chName}</div>
 													<Row wrap justify='space-between'>
-														{(first.childList || []).map(({ code, chName }) => <Col span={8} key={code}>
+														{(first.childList || []).map(({ code, chName },index) => <Col span={8} key={code}>
 															<Checkbox
-																checked={industries.indexOf(code) > -1}
+																checked={industriesValue.indexOf(code) > -1}
 																onChange={(e) => {
 																	const checked = e.target.checked;
 																	if (checked) {
-																		appendIndustry(code);
+																		appendIndustry(labelInValue?{value:code,label:chName}:code);
 																	} else {
 																		removeIndustry(code);
 																	}
@@ -191,6 +202,7 @@ IndustrySelect.defaultProps = {
 	title: "请选择行业",
 	size: 1,
 	defaultValue: [],
+	labelInValue:false,
 	onChange: () => {
 	}
 };

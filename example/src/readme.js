@@ -1,5 +1,5 @@
-import * as component_5 from '@kne/react-industry-select';
-import * as component_6 from 'antd';
+import * as component_51 from '@kne/react-industry-select';
+import * as component_52 from 'antd';
 const readmeConfig = {
     name: `@kne/react-industry-select`,
     description: `行业选择器`,
@@ -38,6 +38,12 @@ const readmeConfig = {
 <td>选中触发事件</td>
 <td>function(value)</td>
 <td>-</td>
+</tr>
+<tr>
+<td>labelInValue</td>
+<td>value是否包含label</td>
+<td>boolean</td>
+<td>false</td>
 </tr>
 </tbody>
 </table>
@@ -130,6 +136,12 @@ const readmeConfig = {
 <td>-</td>
 </tr>
 <tr>
+<td>getIndustryByName(name)</td>
+<td>传入行业name返回行业数据</td>
+<td>function</td>
+<td>-</td>
+</tr>
+<tr>
 <td>getChildById(id)</td>
 <td>通过一级id，获取二级行业</td>
 <td>function</td>
@@ -156,10 +168,11 @@ const {Button}=Antd;
 const {useState}=React;
 
 const BaseExample = ()=>{
-    const [v,setV]=useState(["040","420"]);
+    const [v,setV]=useState([{label:'xxx',value:"040"},{label:'xxx',value:"420"}]);
 
     return <Button onClick={()=>{
         createIndustrySelect({
+            labelInValue:true,
             defaultValue:v,
             size:3,
             onChange:(code)=>{
@@ -167,7 +180,7 @@ const BaseExample = ()=>{
             }
         })
     }}>
-        <DisplayIndustry id={v}>{(list)=>{
+        <DisplayIndustry id={v.map(item=>item.value)}>{(list)=>{
             if(Array.isArray(list)){
                 return list.map(item=>item.chName).join(",")
             }
@@ -182,11 +195,11 @@ render(<BaseExample />);
     scope: [{
     name: "IndustrySelect",
     packageName: "@kne/react-industry-select",
-    component: component_5
+    component: component_51
 },{
     name: "Antd",
     packageName: "antd",
-    component: component_6
+    component: component_52
 }]
 },{
     title: `行业类别单选`,
@@ -223,11 +236,11 @@ render(<BaseExample />);
     scope: [{
     name: "IndustrySelect",
     packageName: "@kne/react-industry-select",
-    component: component_5
+    component: component_51
 },{
     name: "Antd",
     packageName: "antd",
-    component: component_6
+    component: component_52
 }]
 }]
     }

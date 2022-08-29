@@ -4,6 +4,7 @@
   .ant-modal-body{
     padding:0;
     height: calc(100vh - 240px);
+    overflow: hidden;
     > .ant-row{
       height: 100%;
     }
@@ -20,25 +21,40 @@
     box-shadow: none;
     border-radius: 50%;
   }
+  .ant-anchor-ink-ball{
+    display: none;
+  }
   .ant-anchor-link-title{
 
     font-size: 12px;
     color: #222222;
     line-height: 18px;
     padding:7px 8px;
+    &:hover{
+      font-weight: bold;
+    }
   }
   .ant-anchor-link-active > .ant-anchor-link-title{
     background: #F3F3F3;
     border-radius: 4px;
-    font-weight: 500;
+    font-weight: bold;
     border:none;
+  }
+  &-selected{
+    line-height: 30px;
   }
   &-left{
     padding-top:30px;
     flex-shrink: 0;
-    width: 198px;
+  }
+  &-left-col{
     padding-right: 24px;
+    height: 100%;
     border-right: solid 1px #F1F1F1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 198px;
+    flex-shrink: 0;
   }
   &-right{
     padding-left: 32px;
