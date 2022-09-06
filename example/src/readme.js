@@ -1,5 +1,5 @@
-import * as component_81 from '@kne/react-industry-select';
-import * as component_82 from 'antd';
+import * as component_101 from '@kne/react-industry-select';
+import * as component_102 from 'antd';
 const readmeConfig = {
     name: `@kne/react-industry-select`,
     description: `行业选择器`,
@@ -195,11 +195,11 @@ render(<BaseExample />);
     scope: [{
     name: "IndustrySelect",
     packageName: "@kne/react-industry-select",
-    component: component_81
+    component: component_101
 },{
     name: "Antd",
     packageName: "antd",
-    component: component_82
+    component: component_102
 }]
 },{
     title: `行业类别单选`,
@@ -236,11 +236,54 @@ render(<BaseExample />);
     scope: [{
     name: "IndustrySelect",
     packageName: "@kne/react-industry-select",
-    component: component_81
+    component: component_101
 },{
     name: "Antd",
     packageName: "antd",
-    component: component_82
+    component: component_102
+}]
+},{
+    title: `行业类别多选`,
+    description: `多选层级`,
+    code: `const {createIndustrySelect,DisplayIndustry}=IndustrySelect;
+const {Button}=Antd;
+
+const {useState}=React;
+
+const BaseExample = ()=>{
+    const [v,setV]=useState([{label:'xxx',value:"001001"}]);
+
+    return <Button onClick={()=>{
+        createIndustrySelect({
+            labelInValue:true,
+            defaultValue:v,
+            size:3,
+            selectLevel: 2,
+            onChange:(code)=>{
+                setV(code);
+            }
+        })
+    }}>
+        <DisplayIndustry id={v.map(item=>item.value)}>{(list)=>{
+            if(Array.isArray(list)){
+                return list.map(item=>item.chName).join(",")
+            }
+            return list&&list.chName
+        }}</DisplayIndustry>
+    </Button>
+};
+
+render(<BaseExample />);
+
+`,
+    scope: [{
+    name: "IndustrySelect",
+    packageName: "@kne/react-industry-select",
+    component: component_101
+},{
+    name: "Antd",
+    packageName: "antd",
+    component: component_102
 }]
 }]
     }

@@ -34,11 +34,11 @@ export const RemoteData = ({ loader, options, onLoad, children }) => {
 	return children(data)
 };
 
-const SearchInput = ({ onChange,  industriesCode }) => {
+const SearchInput = ({ onChange, industriesCode }) => {
 	const [value, setValue] = useState(null);
 	const [data, setData] = useState([]);
-	return <Select labelInValue className='industry-modal-search' value={value} onChange={(value,{item}) => {
-		if ( industriesCode.indexOf(get(value, 'value')) > -1) return;
+	return <Select labelInValue className='industry-modal-search' value={value} onChange={(value, { item }) => {
+		if (industriesCode.indexOf(get(value, 'value')) > -1) return;
 		onChange && onChange(item);
 		setValue(null);
 		setData([]);
@@ -51,7 +51,7 @@ const SearchInput = ({ onChange,  industriesCode }) => {
 				setData(list);
 			});
 		}}
-		filterOption={false} 
+		filterOption={false}
 		options={data} />
 };
 
@@ -64,60 +64,60 @@ export const DisplayIndustry = ({ id, children }) => {
 export { default as preset } from './preset';
 
 
-const IndustrySelect = ({ dataSource,labelInValue, onCancel, title, size, defaultValue, onChange, modalTitleRight, selectLevel, ...props }) => {
-	const [industries, setIndustries] = useState((()=>{
-		if(!Array.isArray(defaultValue)) return [];
-		const _default=labelInValue?defaultValue.map(item=>get(item,"value")):defaultValue;
+const IndustrySelect = ({ dataSource, labelInValue, onCancel, title, size, defaultValue, onChange, modalTitleRight, selectLevel, ...props }) => {
+	const [industries, setIndustries] = useState((() => {
+		if (!Array.isArray(defaultValue)) return [];
+		const _default = labelInValue ? defaultValue.map(item => get(item, "value")) : defaultValue;
 
-		return _default.map(id=>{
-			const _filter=apis.getIndustryById(dataSource,id);
+		return _default.map(id => {
+			const _filter = apis.getIndustryById(dataSource, id);
 
-			if(_filter){
+			if (_filter) {
 				return {
-					label:_filter.chName,
-					value:_filter.code,
-					parentCode:_filter.parentCode,
-					level:_filter.level
+					label: _filter.chName,
+					value: _filter.code,
+					parentCode: _filter.parentCode,
+					level: _filter.level
 				}
 			}
 		})
 	})());
 
-	const menuList=useMemo(()=>{
+	const menuList = useMemo(() => {
 		return apis.getLeftList(dataSource)
-	},[dataSource]);
+	}, [dataSource]);
 
-	const [selectedKeys, setSelectedKeys] = useState(get(menuList,'[0].code'));
-	const rightList=useMemo(()=>{
-		return apis.getRightList(dataSource,selectedKeys);
-	},[selectedKeys,dataSource])
+	const [selectedKeys, setSelectedKeys] = useState(get(menuList, '[0].code'));
+	const rightList = useMemo(() => {
+		return apis.getRightList(dataSource, selectedKeys);
+	}, [selectedKeys, dataSource])
 
-	const appendIndustry = async(obj) => {
-		const {chName:label,level,parentCode,code:value}=obj;
+	const appendIndustry = async (obj) => {
+		const { chName: label, level, parentCode, code: value } = obj;
 		if (size === 1) {
-			setIndustries([{label,level,parentCode,value}]);
-			onChange([{label,level,parentCode,value}]);
+			setIndustries([{ label, level, parentCode, value }]);
+			onChange([{ label, level, parentCode, value }]);
 			return;
 		}
-		
+
 		let _Industrys = cloneDeep(industries);
 
-		if(level==='0'){
-			_Industrys=_Industrys.filter(item=>item.parentCode!==value);
+		if (level === '0') {
+			_Industrys = _Industrys.filter(item => item.parentCode !== value);
 		}
 		if (_Industrys.length >= size) {
 			message.error(`最多选择${size}个`);
 			return;
 		}
-		_Industrys.push({label,level,parentCode,value});
+		_Industrys.push({ label, level, parentCode, value });
 
 		setIndustries([..._Industrys]);
 	};
 	const removeIndustry = (code) => {
 		setIndustries((list) => {
-			let _list=cloneDeep(list);
-			if(code.level==='0'){
-				_list=list.filter(item=>item.parentCode!==code)
+			let _list = cloneDeep(list);
+			if (code.level === '0') {
+				_list = list.filter(item => item.parentCode !== code)
 			}
 			const index = _list.map(item => get(item, 'value')).indexOf(code);
 			_list.splice(index, 1);
@@ -125,7 +125,7 @@ const IndustrySelect = ({ dataSource,labelInValue, onCancel, title, size, defaul
 		});
 	};
 
-	const  industriesCode = useMemo(() => {
+	const industriesCode = useMemo(() => {
 		return industries.map(item => get(item, 'value', ""));
 	}, [industries]);
 
@@ -135,13 +135,13 @@ const IndustrySelect = ({ dataSource,labelInValue, onCancel, title, size, defaul
 		title={<Row align="middle" justify="space-between">
 			<Col>{title}</Col>
 			<Col pull={1}>
-					<SearchInput
-					industriesCode={ industriesCode}
+				<SearchInput
+					industriesCode={industriesCode}
 					labelInValue={labelInValue}
 					onChange={(value) => {
 						appendIndustry(value);
 					}} />
-				</Col>
+			</Col>
 			{modalTitleRight && <Col pull={2}>
 				{modalTitleRight}
 			</Col>}
@@ -152,7 +152,7 @@ const IndustrySelect = ({ dataSource,labelInValue, onCancel, title, size, defaul
 						<span style={{
 							whiteSpace: 'nowrap'
 						}}>已选{size > 1 ? <>（{industries.length}/{size}）</> : null}：</span>
-						{ industries.map(({value,label}, index) => {
+						{industries.map(({ value, label }, index) => {
 							return <Tag key={value} className='industry-modal-tag' closable={size > 1} onClose={() => {
 								removeIndustry(value);
 							}}>{label}</Tag>;
@@ -169,69 +169,71 @@ const IndustrySelect = ({ dataSource,labelInValue, onCancel, title, size, defaul
 					</Space>
 				</Row> : null}
 			</Space>}>
-			<Row wrap={false}>
-					<Col className='industry-modal-left-col'>
-						<div className='industry-modal-left'>
-						<Menu selectedKeys={selectedKeys} onSelect={(item) => {
-										setSelectedKeys(item.key);
-									}}>
-										{menuList.map((item) => {
-											return <Menu.Item key={item.code}>
-											<Space wrap={false} size={0} className='industry-name'>
-												{selectLevel>1?<Checkbox 
-												checked={industriesCode.indexOf(item.code)>-1}	
-												indeterminate={industries.some(key=>key.parentCode===item.code&& industriesCode.indexOf(item.code)===-1)}
-												onChange={(e) => {
-															const checked = e.target.checked;
+		<Row wrap={false}>
+			<Col className='industry-modal-left-col'>
+				<div className='industry-modal-left'>
+					<Menu selectedKeys={selectedKeys} onSelect={(item) => {
+						setSelectedKeys(item.key);
+					}}>
+						{menuList.map((item) => {
+							const count = getCount(dataSource, item.code, industriesCode);
+							return <Menu.Item key={item.code}>
+								<Space wrap={false} size={0} className='industry-name'>
+									{selectLevel > 1 ? <Space>
+										<Checkbox
+											checked={industriesCode.indexOf(item.code) > -1}
+											indeterminate={industries.some(key => key.parentCode === item.code && industriesCode.indexOf(item.code) === -1)}
+											onChange={(e) => {
+												const checked = e.target.checked;
 
-															if (checked) {
-																appendIndustry(item);
-															} else {
-																removeIndustry(item.code);
-															}
-														}}>
-													<span>{item.chName}</span>
-												</Checkbox>:<>
-												<Space justify="center">
-													<span>{item.chName}</span>
-													<span>({getCount(dataSource, item.code,  industriesCode, 3)})</span>
-												</Space>
-												</>}
-												
-											</Space>
-										</Menu.Item>;
-										})}
-									</Menu>
-						</div>
-					</Col>
-					<Col flex={1} className='industry-modal-right'>
-						<div style={{ overflowY: 'auto', height: "100%" }} id="scroll">
-							<Row style={{ flex: 1 }} className="industry-modal-right-content">
-								<Col flex={1}>
-									<Space direction="vertical" style={{ width: '100%' }}>
-											<Row wrap justify='space-between'>
-												{(rightList || []).map((item) => <Col span={8} key={item.code}>
-													<Checkbox
-														disabled={selectLevel>1 && industriesCode.indexOf(item.parentCode)>-1?true:false}
-														checked={selectLevel>1 && industriesCode.indexOf(item.parentCode)>-1?true: industriesCode.indexOf(item.code) > -1}
-														onChange={(e) => {
-															const checked = e.target.checked;
-															if (checked) {
-																appendIndustry(item);
-															} else {
-																removeIndustry(item.code);
-															}
-														}}
-													>{item.chName}</Checkbox>
-												</Col>)}
-											</Row>
+												if (checked) {
+													appendIndustry(item);
+												} else {
+													removeIndustry(item.code);
+												}
+											}} />
+										<span>{item.chName}</span>
+									</Space> : <>
+										<Space justify="center">
+											<span>{item.chName}</span>
+											{count > 0 && <span className="industry-modal-count">({count})</span>}
+										</Space>
+									</>}
 
-									</Space>
-								</Col>
-							</Row>
-						</div>
-					</Col>
-				</Row>
+								</Space>
+							</Menu.Item>;
+						})}
+					</Menu>
+				</div>
+			</Col>
+			<Col flex={1} className='industry-modal-right'>
+				<div style={{ overflowY: 'auto', height: "100%" }} id="scroll">
+					<Row style={{ flex: 1 }} className="industry-modal-right-content">
+						<Col flex={1}>
+							<Space direction="vertical" style={{ width: '100%' }}>
+								<Row wrap justify='space-between'>
+									{(rightList || []).map((item) => <Col span={8} key={item.code}>
+										<Checkbox
+											disabled={selectLevel > 1 && industriesCode.indexOf(item.parentCode) > -1 ? true : false}
+											checked={selectLevel > 1 && industriesCode.indexOf(item.parentCode) > -1 ? true : industriesCode.indexOf(item.code) > -1}
+											onChange={(e) => {
+												const checked = e.target.checked;
+												if (checked) {
+													appendIndustry(item);
+												} else {
+													removeIndustry(item.code);
+												}
+											}}
+										>{item.chName}</Checkbox>
+									</Col>)}
+								</Row>
+
+							</Space>
+						</Col>
+					</Row>
+				</div>
+			</Col>
+		</Row>
 	</Modal>
 };
 
@@ -247,24 +249,24 @@ IndustrySelect.defaultProps = {
 	}
 };
 
-export const createIndustrySelect = withLayer(({ close, onChange,labelInValue, ...props }) => {
-	return <RemoteData loader={apis.getAllList}>{(dataSource)=>{
-		return <IndustrySelect {...props} 
-		dataSource={dataSource} 
-		labelInValue={labelInValue} 
-		onCancel={close} 
-		onChange={(value) => {
-			let changeValue=[]
-			if(get(value,'length',0)>0){
-				changeValue=labelInValue?value.map(item=>({label:get(item,"label"),value:get(item,'value')})):
-				value.map(item=>get(item,"value"))
-			}
-		
-			onChange && onChange(changeValue);
-			close();
-		}} />
+export const createIndustrySelect = withLayer(({ close, onChange, labelInValue, ...props }) => {
+	return <RemoteData loader={apis.getAllList}>{(dataSource) => {
+		return <IndustrySelect {...props}
+			dataSource={dataSource}
+			labelInValue={labelInValue}
+			onCancel={close}
+			onChange={(value) => {
+				let changeValue = []
+				if (get(value, 'length', 0) > 0) {
+					changeValue = labelInValue ? value.map(item => ({ label: get(item, "label"), value: get(item, 'value') })) :
+						value.map(item => get(item, "value"))
+				}
+
+				onChange && onChange(changeValue);
+				close();
+			}} />
 	}}</RemoteData>
-	
+
 });
 
 export default IndustrySelect;
