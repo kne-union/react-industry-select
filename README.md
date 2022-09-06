@@ -34,7 +34,7 @@ const {Button}=Antd;
 const {useState}=React;
 
 const BaseExample = ()=>{
-    const [v,setV]=useState([{label:'xxx',value:"040"},{label:'xxx',value:"420"}]);
+    const [v,setV]=useState([{label:'xxx',value:"001001"}]);
 
     return <Button onClick={()=>{
         createIndustrySelect({
@@ -70,7 +70,7 @@ const {Button}=Antd;
 const {useState}=React;
 
 const BaseExample = ()=>{
-    const [v,setV]=useState(["040"]);
+    const [v,setV]=useState(["001001"]);
 
     return <Button onClick={()=>{
         createIndustrySelect({

@@ -13,48 +13,15 @@ export const apis = {
             return data
         });
     },
-    getLeftList: () => {
-        return apis.loadData().then(({data}) => {
-            return data.filter(item=>item.level === '0'&&item.code!=="000")
-        });
-    },
-    getRightList: (id) => {
-        return apis.loadData().then(({data}) => {
-            return data.filter(item=>item.level === '1'&&item.parentCode===id)
-        });
-    },
-    getChildById: (data,id) => {
-        return data.filter(item=>item.level === '1'&&item.parentCode===id)
-    },
-    getAllRightList: ()=>{
-        return apis.loadData().then(({data}) => {
-            return data.filter(item=>item.level === '0'&&item.code!=="000").map(item=>{
-                return {...item,childList: apis.getChildById(data,item.code)}
-            })
-        });
-    },
     getIndustry: (id) => {
         return apis.loadData().then(({data}) => {
             if(Array.isArray(id)){
                 return data.filter(item=>{
-                    return id.some(i=>item.level === '1'&&item.code===i)
+                    return id.some(i=>item.code===i)
                 })
             }
             if(typeof id === 'string'){
-                return data.find(item=>item.level === '1'&&item.code===id)
-            }
-            return null
-        });
-    }, 
-    getIndustryByName: (name) => {
-        return apis.loadData().then(({data}) => {
-            if(Array.isArray(id)){
-                return data.filter(item=>{
-                    return id.some(i=>item.level === '1'&&item.chName===i)
-                })
-            }
-            if(typeof id === 'string'){
-                return data.find(item=>item.level === '1'&&item.chName===id)
+                return data.find(item=>item.code===id)
             }
             return null
         });
@@ -71,10 +38,36 @@ export const apis = {
             }).map((item) => {
                 return {
                     label: item.chName, 
-                    value: item.code
+                    value: item.code,
+                    item
                 };
             });
         });
+    }, 
+    getLeftList: (data) => data.filter(item=>item.level === '0'&&item.code!=="000"),
+    getRightList: (data,id) => data.filter(item=>item.level === '1'&&item.parentCode===id),
+    getChildById: (data,id) => data.filter(item=>item.level === '1'&&item.parentCode===id),
+    getIndustryById: (data,id) => {
+        if(Array.isArray(id)){
+            return data.filter(item=>{
+                return id.some(i=>item.code===i)
+            })
+        }
+        if(typeof id === 'string'){
+            return data.find(item=>item.code===id)
+        }
+        return null
+    }, 
+    getIndustryByName: (data,name) => {
+        if(Array.isArray(id)){
+            return data.filter(item=>{
+                return id.some(i=>item.chName===i)
+            })
+        }
+        if(typeof id === 'string'){
+            return data.find(item=>item.chName===name)
+        }
+        return null
     }
 };
 
