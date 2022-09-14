@@ -28,18 +28,19 @@ export const RemoteData = ({ loader, options, onLoad, children }) => {
 	if (error) {
 		return <Result status="error" title="获取数据发生错误" subTitle={error.message} />
 	}
-	if (!data) {
+	
+	if (!data||get(data,'length',0)===0) {
 		return "-"
 	}
 	return children(data)
 };
 
-const SearchInput = ({ onChange, industriesCode }) => {
+const SearchInput = ({ dataSource,onChange, industriesCode ,level}) => {
 	const [value, setValue] = useState(null);
 	const [data, setData] = useState([]);
-	return <Select labelInValue className='industry-modal-search' value={value} onChange={(value, { item }) => {
-		if (industriesCode.indexOf(get(value, 'value')) > -1) return;
-		onChange && onChange(item);
+	return <Select className='industry-modal-search' value={value} onChange={(value) => {
+		if (industriesCode.indexOf(value) > -1) return;
+		onChange && onChange(_apis.getIndustryById(dataSource,value));
 		setValue(null);
 		setData([]);
 	}} showSearch placeholder="输入行业关键词" style={{ width: '250px' }}
@@ -47,7 +48,7 @@ const SearchInput = ({ onChange, industriesCode }) => {
 		showArrow={false}
 		notFoundContent={null}
 		onSearch={(value) => {
-			return apis.searchIndustries(value).then((list) => {
+			return apis.searchIndustries(value,level).then((list) => {
 				setData(list);
 			});
 		}}
@@ -58,6 +59,9 @@ const SearchInput = ({ onChange, industriesCode }) => {
 export const apis = _apis;
 
 export const DisplayIndustry = ({ id, children }) => {
+	if(!Array.isArray(id)){
+		id=[id];
+	}
 	return <RemoteData loader={apis.getIndustry} options={id}>{children}</RemoteData>
 };
 
@@ -69,46 +73,48 @@ const IndustrySelect = ({ dataSource, labelInValue, onCancel, title, size, defau
 		if (!Array.isArray(defaultValue)) return [];
 		const _default = labelInValue ? defaultValue.map(item => get(item, "value")) : defaultValue;
 
-		return _default.map(id => {
-			const _filter = apis.getIndustryById(dataSource, id);
+		return _default.map((id,index) => {
+			const _filter = apis.getIndustryById(dataSource, id)||{};
 
 			if (_filter) {
 				return {
-					label: _filter.chName,
-					value: _filter.code,
+					label: _filter.chName||"-",
+					value: id,
 					parentCode: _filter.parentCode,
 					level: _filter.level
 				}
 			}
+			return defaultValue[index]
 		})
 	})());
+	const [selectedKeys, setSelectedKeys] = useState();
+
+	const industriesCode = useMemo(() => {
+		return industries.map(item => get(item, 'value', ""));
+	}, [industries]);
 
 	const menuList = useMemo(() => {
 		return apis.getLeftList(dataSource)
 	}, [dataSource]);
 
-	const [selectedKeys, setSelectedKeys] = useState(get(menuList, '[0].code'));
 	const rightList = useMemo(() => {
 		return apis.getRightList(dataSource, selectedKeys);
 	}, [selectedKeys, dataSource])
 
 	const appendIndustry = async (obj) => {
 		const { chName: label, level, parentCode, code: value } = obj;
-		if (size === 1) {
-			setIndustries([{ label, level, parentCode, value }]);
-			onChange([{ label, level, parentCode, value }]);
-			return;
-		}
 
 		let _Industrys = cloneDeep(industries);
 
-		if (level === '0') {
-			_Industrys = _Industrys.filter(item => item.parentCode !== value);
-		}
 		if (_Industrys.length >= size) {
 			message.error(`最多选择${size}个`);
 			return;
 		}
+
+		if (level === '0') {
+			_Industrys = _Industrys.filter(item => item.parentCode !== value);
+		}
+
 		_Industrys.push({ label, level, parentCode, value });
 
 		setIndustries([..._Industrys]);
@@ -124,10 +130,16 @@ const IndustrySelect = ({ dataSource, labelInValue, onCancel, title, size, defau
 			return _list;
 		});
 	};
-
-	const industriesCode = useMemo(() => {
-		return industries.map(item => get(item, 'value', ""));
-	}, [industries]);
+	useEffect(()=>{
+		if (get(defaultValue,'length',0)>0) {
+			const _filter = apis.getIndustryById(dataSource, labelInValue?get(defaultValue,"[0].value"):defaultValue[0]);
+			if(_filter){
+				setSelectedKeys(_filter.parentCode?_filter.parentCode:_filter.code)
+			}
+			return;
+		}
+		setSelectedKeys(get(menuList, '[0].code'))
+	},[menuList,defaultValue,dataSource,labelInValue])
 
 	return <Modal {...props} width={1000} centered
 		wrapClassName="industry-modal"
@@ -136,10 +148,13 @@ const IndustrySelect = ({ dataSource, labelInValue, onCancel, title, size, defau
 			<Col>{title}</Col>
 			<Col pull={1}>
 				<SearchInput
+				dataSource={dataSource}
+				level={selectLevel}
 					industriesCode={industriesCode}
 					labelInValue={labelInValue}
 					onChange={(value) => {
 						appendIndustry(value);
+						setSelectedKeys(value.parentCode?value.parentCode:value.code);
 					}} />
 			</Col>
 			{modalTitleRight && <Col pull={2}>
@@ -151,15 +166,15 @@ const IndustrySelect = ({ dataSource, labelInValue, onCancel, title, size, defau
 					<Space wrap={false} size={8} className='industry-modal-selected'>
 						<span style={{
 							whiteSpace: 'nowrap'
-						}}>已选{size > 1 ? <>（{industries.length}/{size}）</> : null}：</span>
+						}}>已选{industries.length}/{size}）：</span>
 						{industries.map(({ value, label }, index) => {
-							return <Tag key={value} className='industry-modal-tag' closable={size > 1} onClose={() => {
+							return <Tag key={value} className='industry-modal-tag' closable={true} onClose={() => {
 								removeIndustry(value);
 							}}>{label}</Tag>;
 						})}
 					</Space>
 				</Row>
-				{size > 1 ? <Row justify='end'>
+				<Row justify='end'>
 					<Space size={8} >
 						<Button onClick={onCancel}>取消</Button>
 						<Button type="primary" onClick={() => {
@@ -167,7 +182,7 @@ const IndustrySelect = ({ dataSource, labelInValue, onCancel, title, size, defau
 						}}>确认</Button>
 
 					</Space>
-				</Row> : null}
+				</Row> 
 			</Space>}>
 		<Row wrap={false}>
 			<Col className='industry-modal-left-col'>
@@ -207,8 +222,7 @@ const IndustrySelect = ({ dataSource, labelInValue, onCancel, title, size, defau
 				</div>
 			</Col>
 			<Col flex={1} className='industry-modal-right'>
-				<div style={{ overflowY: 'auto', height: "100%" }} id="scroll">
-					<Row style={{ flex: 1 }} className="industry-modal-right-content">
+			<Row style={{ flex: 1 }} className="industry-modal-right-content">
 						<Col flex={1}>
 							<Space direction="vertical" style={{ width: '100%' }}>
 								<Row wrap justify='space-between'>
@@ -231,7 +245,6 @@ const IndustrySelect = ({ dataSource, labelInValue, onCancel, title, size, defau
 							</Space>
 						</Col>
 					</Row>
-				</div>
 			</Col>
 		</Row>
 	</Modal>

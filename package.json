@@ -1,6 +1,6 @@
 {
   "name": "@kne/react-industry-select",
-  "version": "0.2.2",
+  "version": "0.2.8",
   "description": "行业选择器",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",

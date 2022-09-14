@@ -16,9 +16,7 @@ export const apis = {
     getIndustry: (id) => {
         return apis.loadData().then(({data}) => {
             if(Array.isArray(id)){
-                return data.filter(item=>{
-                    return id.some(i=>item.code===i)
-                })
+                return id.map(i=>data.find(item=>item.code===i)||({chName:"-"}))
             }
             if(typeof id === 'string'){
                 return data.find(item=>item.code===id)
@@ -26,12 +24,12 @@ export const apis = {
             return null
         });
     }, 
-    searchIndustries: (value) => {
+    searchIndustries: (value,level) => {
         if (!value) {
             return Promise.resolve([]);
         }
         return apis.loadData().then(({data}) => {
-            return data.filter(item=>item.level === '1').filter((item) => {
+            return data.filter(item=>item.code !== '000'&&(level===2?(+item.level)<=level-1:level===(+item.level))).filter((item) => {
                 return ['pinyin', 'chName', 'shortName', 'enName'].some((name) => {
                     return item[name].toUpperCase().indexOf(value.toUpperCase()) > -1;
                 });
@@ -49,9 +47,7 @@ export const apis = {
     getChildById: (data,id) => data.filter(item=>item.level === '1'&&item.parentCode===id),
     getIndustryById: (data,id) => {
         if(Array.isArray(id)){
-            return data.filter(item=>{
-                return id.some(i=>item.code===i)
-            })
+            return id.map(i=>data.find(item=>item.code===i)||({chName:"-"}))
         }
         if(typeof id === 'string'){
             return data.find(item=>item.code===id)

@@ -4,7 +4,7 @@ const {Button}=Antd;
 const {useState}=React;
 
 const BaseExample = ()=>{
-    const [v,setV]=useState([{label:'xxx',value:"001001"}]);
+    const [v,setV]=useState([{label:'xxx',value:"001001"},{label:'xxx',value:"420"}]);
 
     return <Button onClick={()=>{
         createIndustrySelect({
@@ -17,6 +17,7 @@ const BaseExample = ()=>{
         })
     }}>
         <DisplayIndustry id={v.map(item=>item.value)}>{(list)=>{
+
             if(Array.isArray(list)){
                 return list.map(item=>item.chName).join(",")
             }

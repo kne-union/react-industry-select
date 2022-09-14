@@ -34,7 +34,7 @@ const {Button}=Antd;
 const {useState}=React;
 
 const BaseExample = ()=>{
-    const [v,setV]=useState([{label:'xxx',value:"001001"}]);
+    const [v,setV]=useState([{label:'xxx',value:"001001"},{label:'xxx',value:"420"}]);
 
     return <Button onClick={()=>{
         createIndustrySelect({
@@ -47,6 +47,7 @@ const BaseExample = ()=>{
         })
     }}>
         <DisplayIndustry id={v.map(item=>item.value)}>{(list)=>{
+
             if(Array.isArray(list)){
                 return list.map(item=>item.chName).join(",")
             }
@@ -70,12 +71,13 @@ const {Button}=Antd;
 const {useState}=React;
 
 const BaseExample = ()=>{
-    const [v,setV]=useState(["001001"]);
+    const [v,setV]=useState(["007028"]);
 
     return <Button onClick={()=>{
         createIndustrySelect({
-            defaultValue:v,
+            // defaultValue:v,
             size:1,
+            selectLevel: 2,
             onChange:(code)=>{
                 setV(code);
             }
@@ -105,7 +107,7 @@ const {Button}=Antd;
 const {useState}=React;
 
 const BaseExample = ()=>{
-    const [v,setV]=useState([{label:'xxx',value:"001001"}]);
+    const [v,setV]=useState([{label:'xxx',value:"007"}]);
 
     return <Button onClick={()=>{
         createIndustrySelect({
@@ -151,7 +153,7 @@ render(<BaseExample />);
 #### 这是一个组件
 |属性名|说明|类型|默认值|
 |  ---  | ---  | --- | --- |
-|  id  | 选中的项的id，支持字符串或数组格式 | string/array | - |
+|  id  | 选中的项的id，数组格式 | array | - |
 |  children  | id是数组返回的也是数组，id是字符串，返回的是对象 | function({list}=>{}) | - |
 
 

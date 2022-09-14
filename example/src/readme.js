@@ -1,5 +1,5 @@
-import * as component_101 from '@kne/react-industry-select';
-import * as component_102 from 'antd';
+import * as component_21 from '@kne/react-industry-select';
+import * as component_22 from 'antd';
 const readmeConfig = {
     name: `@kne/react-industry-select`,
     description: `行业选择器`,
@@ -63,8 +63,8 @@ const readmeConfig = {
 <tbody>
 <tr>
 <td>id</td>
-<td>选中的项的id，支持字符串或数组格式</td>
-<td>string/array</td>
+<td>选中的项的id，数组格式</td>
+<td>array</td>
 <td>-</td>
 </tr>
 <tr>
@@ -168,7 +168,7 @@ const {Button}=Antd;
 const {useState}=React;
 
 const BaseExample = ()=>{
-    const [v,setV]=useState([{label:'xxx',value:"001001"}]);
+    const [v,setV]=useState([{label:'xxx',value:"001001"},{label:'xxx',value:"420"}]);
 
     return <Button onClick={()=>{
         createIndustrySelect({
@@ -181,6 +181,7 @@ const BaseExample = ()=>{
         })
     }}>
         <DisplayIndustry id={v.map(item=>item.value)}>{(list)=>{
+
             if(Array.isArray(list)){
                 return list.map(item=>item.chName).join(",")
             }
@@ -195,11 +196,11 @@ render(<BaseExample />);
     scope: [{
     name: "IndustrySelect",
     packageName: "@kne/react-industry-select",
-    component: component_101
+    component: component_21
 },{
     name: "Antd",
     packageName: "antd",
-    component: component_102
+    component: component_22
 }]
 },{
     title: `行业类别单选`,
@@ -210,12 +211,13 @@ const {Button}=Antd;
 const {useState}=React;
 
 const BaseExample = ()=>{
-    const [v,setV]=useState(["001001"]);
+    const [v,setV]=useState(["007028"]);
 
     return <Button onClick={()=>{
         createIndustrySelect({
-            defaultValue:v,
+            // defaultValue:v,
             size:1,
+            selectLevel: 2,
             onChange:(code)=>{
                 setV(code);
             }
@@ -236,11 +238,11 @@ render(<BaseExample />);
     scope: [{
     name: "IndustrySelect",
     packageName: "@kne/react-industry-select",
-    component: component_101
+    component: component_21
 },{
     name: "Antd",
     packageName: "antd",
-    component: component_102
+    component: component_22
 }]
 },{
     title: `行业类别多选`,
@@ -251,7 +253,7 @@ const {Button}=Antd;
 const {useState}=React;
 
 const BaseExample = ()=>{
-    const [v,setV]=useState([{label:'xxx',value:"001001"}]);
+    const [v,setV]=useState([{label:'xxx',value:"007"}]);
 
     return <Button onClick={()=>{
         createIndustrySelect({
@@ -279,11 +281,11 @@ render(<BaseExample />);
     scope: [{
     name: "IndustrySelect",
     packageName: "@kne/react-industry-select",
-    component: component_101
+    component: component_21
 },{
     name: "Antd",
     packageName: "antd",
-    component: component_102
+    component: component_22
 }]
 }]
     }
