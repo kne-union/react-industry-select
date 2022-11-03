@@ -4,11 +4,11 @@ const {Button}=Antd;
 const {useState}=React;
 
 const BaseExample = ()=>{
-    const [v,setV]=useState(["007028"]);
+    const [v,setV]=useState(["0028"]);
 
     return <Button onClick={()=>{
         createIndustrySelect({
-            // defaultValue:v,
+            defaultValue:v,
             size:1,
             selectLevel: 2,
             onChange:(code)=>{

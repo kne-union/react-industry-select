@@ -6,9 +6,15 @@
       margin-left: 0;
     }
   }
+  .ant-modal-header{
+    padding: 12px 24px 11px;
+    .ant-modal-title{
+      line-height: 20px;
+    }
+  }
   .ant-modal-body{
     padding:0;
-    height: calc(100vh - 400px);
+    height: calc(100vh - 232px);
     overflow: hidden;
     > .ant-row{
       height: 100%;
@@ -16,6 +22,11 @@
   }
   .ant-modal-footer{
     text-align: left;
+    padding:0;
+
+    .ant-divider-horizontal{
+      margin:0;
+    }
   }
   .ant-badge-count{
     background-color: rgba(92, 184, 178, 0.1);
@@ -88,14 +99,25 @@
   }
   &-tag{
     border:none;
-    padding:5px 8px 5px 12px;
+    padding:4px 8px 4px 12px;
     margin-right: 0;
+    background: #F3F3F3;
+    border-radius: 2px;
+  }
+  &-btn{
+    border-top:solid 1px #F1F1F1;
   }
   &-search{
     font-weight: normal;
   }
   &-footer{
     width: 100%;
+  }
+  &-footer-top{
+    padding:13px 32px;
+  }
+  &-footer-bottom{
+    padding:12px 24px;
   }
   &-count{
     color:#5CB8B2;

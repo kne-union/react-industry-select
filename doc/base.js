@@ -11,7 +11,7 @@ const BaseExample = ()=>{
             labelInValue:true,
             defaultValue:v,
             size:3,
-            onChange:(code)=>{
+            onChange:(code,item)=>{
                 setV(code);
             }
         })

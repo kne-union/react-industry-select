@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Modal, Row, Col, Checkbox, Result, Space, Tag, Menu, Select, Button, message, Badge } from 'antd';
-import { withLayer } from "@kne/antd-enhance";
+import { Modal, Row, Col, Checkbox, Result, Space, Tag, Menu, Select, Button, message, Divider } from 'antd';
+import withLayer from '@kne/with-layer';
 import { apis as _apis } from './preset';
 import get from 'lodash/get';
 import './index.scss';
@@ -134,9 +134,9 @@ const IndustrySelect = ({ dataSource, labelInValue, onCancel, title, size, defau
 		if (get(defaultValue,'length',0)>0) {
 			const _filter = apis.getIndustryById(dataSource, labelInValue?get(defaultValue,"[0].value"):defaultValue[0]);
 			if(_filter){
-				setSelectedKeys(_filter.parentCode?_filter.parentCode:_filter.code)
+				setSelectedKeys(_filter.parentCode?_filter.parentCode:_filter.code);
+				return;
 			}
-			return;
 		}
 		setSelectedKeys(get(menuList, '[0].code'))
 	},[menuList,defaultValue,dataSource,labelInValue])
@@ -161,12 +161,12 @@ const IndustrySelect = ({ dataSource, labelInValue, onCancel, title, size, defau
 				{modalTitleRight}
 			</Col>}
 		</Row>} footer={
-			<Space className='industry-modal-footer' direction='vertical' size={12}>
-				<Row align='middle' justify='start'>
-					<Space wrap={false} size={8} className='industry-modal-selected'>
+			<Space className='industry-modal-footer' direction='vertical' size={0}>
+				<Row align='middle' justify='start' className='industry-modal-footer-top'>
+					<Space align='center' block wrap={false} size={8} className='industry-modal-selected'>
 						<span style={{
 							whiteSpace: 'nowrap'
-						}}>已选{industries.length}/{size}）：</span>
+						}}>已选（{industries.length}/{size}）：</span>
 						{industries.map(({ value, label }, index) => {
 							return <Tag key={value} className='industry-modal-tag' closable={true} onClose={() => {
 								removeIndustry(value);
@@ -174,7 +174,8 @@ const IndustrySelect = ({ dataSource, labelInValue, onCancel, title, size, defau
 						})}
 					</Space>
 				</Row>
-				<Row justify='end'>
+				<Divider/>
+				<Row justify='end' className='industry-modal-footer-bottom'>
 					<Space size={8} >
 						<Button onClick={onCancel}>取消</Button>
 						<Button type="primary" onClick={() => {
@@ -262,21 +263,25 @@ IndustrySelect.defaultProps = {
 	}
 };
 
-export const createIndustrySelect = withLayer(({ close, onChange, labelInValue, ...props }) => {
+export const createIndustrySelect = withLayer(({ close, onChange, labelInValue,onCancel, ...props }) => {
 	return <RemoteData loader={apis.getAllList}>{(dataSource) => {
 		return <IndustrySelect {...props}
 			dataSource={dataSource}
 			labelInValue={labelInValue}
-			onCancel={close}
+			onCancel={()=>{
+				close();
+				onCancel();
+			}}
 			onChange={(value) => {
-				let changeValue = []
+				let changeValue = [],valueObj=[];
 				if (get(value, 'length', 0) > 0) {
-					changeValue = labelInValue ? value.map(item => ({ label: get(item, "label"), value: get(item, 'value') })) :
-						value.map(item => get(item, "value"))
+					valueObj=value.map(item => ({ label: get(item, "label"), value: get(item, 'value') }));
+					changeValue = labelInValue ? valueObj :value.map(item => get(item, "value"))
 				}
 
-				onChange && onChange(changeValue);
+				onChange && onChange(changeValue,valueObj);
 				close();
+				onCancel();
 			}} />
 	}}</RemoteData>
 
